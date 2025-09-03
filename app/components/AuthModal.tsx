@@ -22,49 +22,29 @@ export function AuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const supabase = createClientComponentClient()
 
     try {
+      // For now, simulate authentication since Supabase isn't fully configured
       if (isLogin) {
-        // Sign in with email and password
-        const { data, error } = await supabase.auth.signInWithPassword({
+        // Simulate login
+        const user = {
           email: formData.email,
-          password: formData.password,
-        })
-
-        if (error) throw error
-
-        if (data.user) {
-          const user = {
-            email: data.user.email!,
-            name: data.user.user_metadata?.name || data.user.email!.split('@')[0]
-          }
-          onLogin(user)
+          name: formData.email.split('@')[0]
         }
+        localStorage.setItem('user', JSON.stringify(user))
+        onLogin(user)
       } else {
-        // Sign up with email and password
-        const { data, error } = await supabase.auth.signUp({
+        // Simulate signup
+        const user = {
           email: formData.email,
-          password: formData.password,
-          options: {
-            data: {
-              name: formData.name,
-            }
-          }
-        })
-
-        if (error) throw error
-
-        if (data.user) {
-          const user = {
-            email: data.user.email!,
-            name: formData.name
-          }
-          onLogin(user)
+          name: formData.name
         }
+        localStorage.setItem('user', JSON.stringify(user))
+        onLogin(user)
       }
 
       onClose()
+      alert('Demo mode: Authentication simulated. In production, this will connect to Supabase.')
     } catch (error: any) {
       alert(error.message || 'An error occurred during authentication')
     }
