@@ -22,8 +22,11 @@ export function Header({ user, onLogin, onLogout }: HeaderProps) {
     onLogin?.(userData)
   }
 
-  const handleLogout = () => {
-    localStorage.removeItem('user')
+  const handleLogout = async () => {
+    const { createClientComponentClient } = await import('@/lib/supabase')
+    const supabase = createClientComponentClient()
+
+    await supabase.auth.signOut()
     onLogout?.()
   }
 

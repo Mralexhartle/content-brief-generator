@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { X, Mail, Lock, User } from 'lucide-react'
+import { createClientComponentClient } from '@/lib/supabase'
 
 interface AuthModalProps {
   isOpen: boolean
@@ -19,30 +20,54 @@ export function AuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
 
   if (!isOpen) return null
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    const supabase = createClientComponentClient()
 
-    // In a real app, this would make an API call
-    // For demo purposes, we'll simulate authentication
-    if (isLogin) {
-      // Simulate login
-      const user = {
-        email: formData.email,
-        name: formData.email.split('@')[0] // Simple name extraction
+    try {
+      if (isLogin) {
+        // Sign in with email and password
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: formData.email,
+          password: formData.password,
+        })
+
+        if (error) throw error
+
+        if (data.user) {
+          const user = {
+            email: data.user.email!,
+            name: data.user.user_metadata?.name || data.user.email!.split('@')[0]
+          }
+          onLogin(user)
+        }
+      } else {
+        // Sign up with email and password
+        const { data, error } = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+          options: {
+            data: {
+              name: formData.name,
+            }
+          }
+        })
+
+        if (error) throw error
+
+        if (data.user) {
+          const user = {
+            email: data.user.email!,
+            name: formData.name
+          }
+          onLogin(user)
+        }
       }
-      localStorage.setItem('user', JSON.stringify(user))
-      onLogin(user)
-    } else {
-      // Simulate signup
-      const user = {
-        email: formData.email,
-        name: formData.name
-      }
-      localStorage.setItem('user', JSON.stringify(user))
-      onLogin(user)
+
+      onClose()
+    } catch (error: any) {
+      alert(error.message || 'An error occurred during authentication')
     }
-
-    onClose()
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

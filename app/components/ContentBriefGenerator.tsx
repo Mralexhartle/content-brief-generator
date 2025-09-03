@@ -41,15 +41,21 @@ export function ContentBriefGenerator() {
   const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
-    // Load user from localStorage on component mount
-    const savedUser = localStorage.getItem('user')
-    if (savedUser) {
-      try {
-        setUser(JSON.parse(savedUser))
-      } catch (error) {
-        console.error('Error parsing saved user:', error)
+    // Load user from Supabase on component mount
+    const checkUser = async () => {
+      const { createClientComponentClient } = await import('@/lib/supabase')
+      const supabase = createClientComponentClient()
+
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        setUser({
+          email: user.email!,
+          name: user.user_metadata?.name || user.email!.split('@')[0]
+        })
       }
     }
+
+    checkUser()
   }, [])
 
   const handleLogin = (userData: User) => {
