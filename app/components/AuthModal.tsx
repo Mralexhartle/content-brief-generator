@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { X, Mail, Lock, User } from 'lucide-react'
-import { createClientComponentClient } from '@/lib/supabase'
+
 
 interface AuthModalProps {
   isOpen: boolean
@@ -45,8 +45,9 @@ export function AuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
 
       onClose()
       alert('Demo mode: Authentication simulated. In production, this will connect to Supabase.')
-    } catch (error: any) {
-      alert(error.message || 'An error occurred during authentication')
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'An error occurred during authentication'
+      alert(message)
     }
   }
 

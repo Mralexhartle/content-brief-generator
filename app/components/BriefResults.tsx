@@ -30,8 +30,8 @@ export function BriefResults({ brief, onNewBrief }: BriefResultsProps) {
     setTimeout(() => setCopiedSection(null), 2000)
   }
 
-  const exportToPDF = () => {
-    const { exportBriefToPDF } = require('../utils/pdfExport')
+  const exportToPDF = async () => {
+    const { exportBriefToPDF } = await import('../utils/pdfExport')
     exportBriefToPDF(brief)
   }
 

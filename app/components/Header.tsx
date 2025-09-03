@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { FileText, Zap, User, LogOut } from 'lucide-react'
 import { AuthModal } from './AuthModal'
 
