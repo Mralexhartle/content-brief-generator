@@ -21,10 +21,34 @@ A modern AI-powered content brief generator that creates detailed, SEO-optimized
 ## Tech Stack
 
 - **Frontend**: Next.js 14, TypeScript, Tailwind CSS
+- **Backend**: Supabase (Database + Auth)
 - **Icons**: Lucide React
 - **PDF Generation**: jsPDF
 - **State Management**: React hooks
 - **Styling**: Tailwind CSS with responsive design
+- **IDE Integration**: Cursor MCP (Model Context Protocol)
+
+## Supabase MCP Configuration
+
+The `.cursor/mcp.json` file enables Cursor IDE integration with Supabase, providing AI-powered assistance for database operations and development.
+
+### Getting Your Supabase Credentials:
+
+1. **Access Token**: Go to [Supabase Dashboard](https://supabase.com/dashboard) > Settings > Access Tokens
+2. **Project ID**: Found in your project URL (e.g., `your-project-id.supabase.co`)
+
+### MCP Configuration Steps:
+
+1. Copy the example file:
+```bash
+cp .cursor/mcp.example.json .cursor/mcp.json
+```
+
+2. Edit `.cursor/mcp.json` and replace:
+   - `your_supabase_access_token_here` with your actual access token
+   - `your_project_id_here` with your Supabase project ID
+
+3. Restart Cursor IDE to activate the MCP integration
 
 ## 🚀 Deployment
 
@@ -93,6 +117,7 @@ cp .env.example .env.local
 ### Prerequisites
 - Node.js 18+
 - npm or yarn
+- Cursor IDE (for MCP integration)
 
 ### Installation
 
@@ -107,18 +132,27 @@ cd content-brief-generator
 npm install
 ```
 
-3. Set up environment variables:
+3. Set up Supabase MCP configuration:
+```bash
+# Copy the MCP configuration
+cp ../.cursor/mcp.example.json ../.cursor/mcp.json
+
+# Edit the MCP configuration with your Supabase credentials
+# You'll need your Supabase access token and project ID
+```
+
+4. Set up environment variables:
 ```bash
 cp .env.example .env.local
 # Edit .env.local with your Supabase credentials
 ```
 
-4. Start the development server:
+5. Start the development server:
 ```bash
 npm run dev
 ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser
+6. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ## Usage
 
