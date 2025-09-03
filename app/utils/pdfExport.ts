@@ -5,8 +5,8 @@ export function exportBriefToPDF(brief: ContentBrief) {
   const doc = new jsPDF()
 
   // Set up fonts and colors
-  const primaryColor = [79, 70, 229] // Indigo
-  const secondaryColor = [107, 114, 128] // Gray
+  const primaryColor: [number, number, number] = [79, 70, 229] // Indigo
+  const secondaryColor: [number, number, number] = [107, 114, 128] // Gray
 
   // Header
   doc.setFontSize(24)
