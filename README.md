@@ -26,7 +26,69 @@ A modern AI-powered content brief generator that creates detailed, SEO-optimized
 - **State Management**: React hooks
 - **Styling**: Tailwind CSS with responsive design
 
-## Getting Started
+## 🚀 Deployment
+
+### Option 1: Vercel (Recommended)
+
+1. **Create a GitHub repository:**
+```bash
+# Go to GitHub and create a new repository called "content-brief-generator"
+# Then add it as remote:
+git remote add origin https://github.com/YOUR_USERNAME/content-brief-generator.git
+git push -u origin main
+```
+
+2. **Deploy to Vercel:**
+   - Go to [vercel.com](https://vercel.com)
+   - Connect your GitHub account
+   - Import the `content-brief-generator` repository
+   - Vercel will automatically detect it's a Next.js app
+   - Add your environment variables (see below)
+   - Deploy!
+
+### Option 2: Manual Deployment
+
+1. **Set up Supabase:**
+   - Go to [supabase.com](https://supabase.com)
+   - Create a new project
+   - Go to Settings > API
+   - Copy your URL and anon key
+   - Go to SQL Editor and run:
+   ```sql
+   -- Create briefs table
+   CREATE TABLE briefs (
+     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+     topic TEXT NOT NULL,
+     title TEXT NOT NULL,
+     description TEXT,
+     keywords TEXT[],
+     outline JSONB,
+     seo_recommendations JSONB,
+     competitor_insights JSONB,
+     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+   );
+
+   -- Enable Row Level Security
+   ALTER TABLE briefs ENABLE ROW LEVEL SECURITY;
+
+   -- Create policy for users to access their own briefs
+   CREATE POLICY "Users can access their own briefs" ON briefs
+     FOR ALL USING (auth.uid() = user_id);
+   ```
+
+2. **Configure Environment Variables:**
+```bash
+cp .env.example .env.local
+# Edit .env.local with your Supabase credentials
+```
+
+3. **Deploy anywhere that supports Node.js:**
+   - Railway, Render, DigitalOcean App Platform, etc.
+   - Just make sure to set the environment variables
+
+## Getting Started (Local Development)
 
 ### Prerequisites
 - Node.js 18+
@@ -36,7 +98,7 @@ A modern AI-powered content brief generator that creates detailed, SEO-optimized
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/YOUR_USERNAME/content-brief-generator.git
 cd content-brief-generator
 ```
 
@@ -45,12 +107,18 @@ cd content-brief-generator
 npm install
 ```
 
-3. Start the development server:
+3. Set up environment variables:
+```bash
+cp .env.example .env.local
+# Edit .env.local with your Supabase credentials
+```
+
+4. Start the development server:
 ```bash
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ## Usage
 
